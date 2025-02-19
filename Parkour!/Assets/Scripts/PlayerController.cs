@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         
         Vector3 dir = look.right * x + look.forward * z;
-        dir*=speed;
+        dir *= speed;
 
         _rb.AddForce(dir, ForceMode.Force);
     }
