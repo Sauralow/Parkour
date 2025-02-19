@@ -9,9 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 100f;
     public bool gameStart = false;
     private GameObject focalPoint;
+    [SerializeField] private Transform look;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         
     }
@@ -21,9 +22,19 @@ public class PlayerController : MonoBehaviour
     {
         if (gameStart)
         {
-            float verticalInput = Input.GetAxis("Vertical");
-            _rb.AddForce(focalPoint.transform.forward * verticalInput * speed);
+            Move();
+
         }
+    }
+    private void Move()
+    {
+        float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxis("Horizontal");
+        
+        Vector3 dir = look.right * x + look.forward * z;
+        dir*=speed;
+
+        _rb.AddForce(dir, ForceMode.Force);
     }
 
     public void StartGame()
