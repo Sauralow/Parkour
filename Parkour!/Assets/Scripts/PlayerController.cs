@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public bool gameStart = false;
     private GameObject focalPoint;
     [SerializeField] private Transform look;
+    [SerializeField] private bool grounded = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
         if (gameStart)
         {
             Move();
+            if(Input.GetKeyDown(KeyCode.Space) && grounded) { Jump(); }
 
         }
     }
@@ -42,5 +44,21 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
         gameStart = true;
+    }
+    private void Jump()
+    {
+        grounded = false;
+        Vector3 dir = Vector3.up * jumpForce;
+        _rb.AddForce(dir, ForceMode.Impulse);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collided");
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Debug.Log("Reset");
+            grounded = true;
+        }
     }
 }
