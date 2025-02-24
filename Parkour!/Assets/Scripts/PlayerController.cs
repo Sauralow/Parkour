@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         grounded = false;
-        Vector3 dir = Vector3.up * jumpForce;
+        Vector3 dir = -Physics.gravity.normalized * jumpForce;
         _rb.AddForce(dir, ForceMode.Impulse);
     }
 
