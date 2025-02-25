@@ -54,10 +54,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collided");
-        if (collision.gameObject.CompareTag("Ground"))
+        //Debug.Log("Collided");
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("wall"))
         {
-            Debug.Log("Reset");
+            //Debug.Log("Reset");
             grounded = true;
         }
     }

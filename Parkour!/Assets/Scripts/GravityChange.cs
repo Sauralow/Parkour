@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GravityChange : MonoBehaviour
 {
+    [SerializeField] bool reset = false;
     Vector3 normalGrav = Physics.gravity;
     // Start is called before the first frame update
     void Start()
@@ -14,75 +15,93 @@ public class GravityChange : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (reset)
+        {
+            Physics.gravity = normalGrav;
+            reset = false;
+        }
     }
 
     private void OnCollisionEnter(Collision col)
     {//Set gravity sideways
-        Vector3 direction = /*col.point*/ - transform.position;
-        direction = direction.normalized;
-    if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
+        if (col.gameObject.CompareTag("wall"))
         {
-            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+            Vector3 direction = col.GetContact(0).point - transform.position;
+            direction = direction.normalized;
+            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
             {
-                if (direction.x > 0)
+                if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
                 {
+                    if (direction.x > 0)
+                    {
+                        Physics.gravity = new Vector3(9.8f, 0, 0);
 
-                   //collision is came from right
+                        //Debug.Log("collision is came from right");
+                    }
+                    else
+                    {
+                        Physics.gravity = new Vector3(-9.8f, 0, 0);
+                        //Debug.Log("collision came from left");
+
+                    }
                 }
                 else
                 {
-                   //collision came from left
+                    if (direction.y > 0)
+                    {
 
+                        Physics.gravity = new Vector3(0, 9.8f, 0);
+                        //Debug.Log("collision is came from top");
+                    }
+                    else
+                    {
+
+                        Physics.gravity = new Vector3(0, -9.8f, 0);
+                        //Debug.Log("collision came from down");
+
+                    }
                 }
-         }
+            }
             else
             {
-                if (direction.y > 0)
+                if (Mathf.Abs(direction.z) > Mathf.Abs(direction.y))
                 {
+                    if (direction.z > 0)
+                    {
 
-                   //collision is came from top
+                        Physics.gravity = new Vector3(0, 0, 9.8f);
+                        //Debug.Log("collision is came from front");
+                    }
+                    else
+                    {
+                        //Debug.Log("collision came from back");
+                        Physics.gravity = new Vector3(0, 0, -9.8f);
+
+                    }
                 }
                 else
                 {
-                   //collision came from down
+                    if (direction.y > 0)
+                    {
 
+                        Physics.gravity = new Vector3(0, 9.8f, 0);
+                        //Debug.Log("collision is came from top");
+                    }
+                    else
+                    {
+
+                        Physics.gravity = new Vector3(0, -9.8f, 0);
+                        //Debug.Log("collision came from down");
+                    }
                 }
-         }
+            }
         }
-        else
-        {
-            if (Mathf.Abs(direction.z) > Mathf.Abs(direction.y))
-            {
-                if (direction.z > 0)
-                {
 
-                   //collision is came from front
-                }
-                else
-                {
-                   //collision came from back
-
-                }
-          }
-            else
-            {
-                if (direction.y > 0)
-                {
-
-                    //collision is came from top
-                }
-                else
-                {
-
-                    //collision came from down
-                }
-             }
-        }
-        Physics.gravity = new Vector3(-0.1f, 0, 0);
+        //Physics.gravity = new Vector3(-0.1f, 0, 0);
     }
     private void OnCollisionExit(Collision collision)
     {
+         
         Physics.gravity = normalGrav;
     }
 }
