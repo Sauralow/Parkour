@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private GameObject focalPoint;
     [SerializeField] private Transform look;
     [SerializeField] private bool grounded = false;
+    [SerializeField] private int collected = 0;
+    [SerializeField] private Vector3 startPos;
+    [SerializeField] private Vector3 spawnPos;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,6 +28,8 @@ public class PlayerController : MonoBehaviour
         {
             Move();
             if(Input.GetKeyDown(KeyCode.Space) && grounded) { Jump(); }
+            if(Input.GetKeyDown(KeyCode.R)) { Respawn(); }
+
 
         }
     }
@@ -43,6 +48,8 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
+        startPos = transform.position;
+        SetSpawn(startPos);
         gameStart = true;
     }
     private void Jump()
@@ -60,5 +67,23 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Reset");
             grounded = true;
         }
+    }
+    public void AddCollectable()
+    {
+        collected++;
+        UpdateUI();
+    }
+    private void UpdateUI()
+    {
+        //update collectables
+    }
+    public void SetSpawn(Vector3 pos)
+    {
+        spawnPos = pos;
+        //put a coroutine that says you can respawn with r
+    }
+    private void Respawn()
+    {
+        transform.position = spawnPos;
     }
 }

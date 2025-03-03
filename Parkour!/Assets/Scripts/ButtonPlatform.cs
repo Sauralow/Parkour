@@ -18,11 +18,11 @@ public class ButtonPlatform : MonoBehaviour
     {
         if (button.pressed)
         {
-            transform.position = Vector3.MoveTowards(transform.position, points[1].position, speed);
+            transform.position = Vector3.MoveTowards(transform.position, points[1].position, speed * Time.deltaTime);
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, points[0].position, speed);
+            transform.position = Vector3.MoveTowards(transform.position, points[0].position, speed * Time.deltaTime);
 
         }
     }

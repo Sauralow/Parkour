@@ -355,12 +355,16 @@
 "Assets/Scripts/ButtonPlatform.cs"
 "Assets/Scripts/ButtonScript.cs"
 "Assets/Scripts/CameraController.cs"
+"Assets/Scripts/Checkpoint.cs"
+"Assets/Scripts/Collectable.cs"
 "Assets/Scripts/FakeGrav.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/GravityChange.cs"
 "Assets/Scripts/Lever.cs"
 "Assets/Scripts/LeverPlatform.cs"
+"Assets/Scripts/MovingWall.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/PowerUp.cs"
 -langversion:9.0
 /deterministic
 /optimize+
