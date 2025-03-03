@@ -5,7 +5,7 @@ using UnityEngine;
 public class Lever : MonoBehaviour
 {
     [SerializeField] private bool contacted = false;
-    [SerializeField] private bool on = false;
+    [SerializeField] public bool on = false;
     [SerializeField] private Vector3 angle = new Vector3(0, 0, -50f);
     [SerializeField] private float rotationSpeed = 1.0f;
     // Start is called before the first frame update
@@ -20,9 +20,12 @@ public class Lever : MonoBehaviour
         if (contacted && !on)
         {
             transform.eulerAngles = Vector3.MoveTowards(transform.eulerAngles, angle, rotationSpeed);
-            if(transform.eulerAngles.z <= angle.z)
+                //Debug.Log("moving towards: " + angle.z + " currently at: " + transform.eulerAngles.z);
+
+            if(308 < transform.eulerAngles.z && transform.eulerAngles.z < 311)
             {
                 on = true;
+                //Debug.Log("stopped");
             }
             
         }
