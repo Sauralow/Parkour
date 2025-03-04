@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody _rb;
-    [SerializeField] private float speed = 50f;
-    [SerializeField] private float jumpForce = 100f;
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpForce;
     public bool gameStart = false;
     private GameObject focalPoint;
     [SerializeField] private Transform look;
@@ -14,6 +14,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int collected = 0;
     [SerializeField] private Vector3 startPos;
     [SerializeField] private Vector3 spawnPos;
+    [SerializeField] private float spawnSpeed;
+    [SerializeField] private float spawnJumpForce;
+    [SerializeField] private bool canDoubleJump = false;
+    [SerializeField] private bool hasDoubleJumped = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -27,7 +31,7 @@ public class PlayerController : MonoBehaviour
         if (gameStart)
         {
             Move();
-            if(Input.GetKeyDown(KeyCode.Space) && grounded) { Jump(); }
+            if(Input.GetKeyDown(KeyCode.Space) && (grounded || canDoubleJump) ) { Jump(); }
             if(Input.GetKeyDown(KeyCode.R)) { Respawn(); }
 
 
@@ -49,11 +53,17 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
         startPos = transform.position;
+        spawnJumpForce = jumpForce;
+        spawnSpeed = speed;
         SetSpawn(startPos);
         gameStart = true;
     }
     private void Jump()
     {
+        if (!grounded)
+        {
+            
+        }
         grounded = false;
         Vector3 dir = -Physics.gravity.normalized * jumpForce;
         _rb.AddForce(dir, ForceMode.Impulse);
@@ -85,5 +95,27 @@ public class PlayerController : MonoBehaviour
     private void Respawn()
     {
         transform.position = spawnPos;
+
     }
+    public void ApplyPowerup(PowerUpType type)
+    {
+        RemovePowerups();
+        switch (type)
+        {
+            case PowerUpType.Speed:
+                speed *= 2;
+                break;
+
+            case PowerUpType.DoubleJump:
+                canDoubleJump = true;
+                break;
+        }
+    }
+    public void RemovePowerups()
+    {
+        speed = spawnSpeed;
+        jumpForce = spawnJumpForce;
+        canDoubleJump = false;
+    }
+    
 }
