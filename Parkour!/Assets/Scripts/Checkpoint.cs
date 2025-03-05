@@ -20,7 +20,8 @@ public class Checkpoint : MonoBehaviour
         PlayerController player = collision.gameObject.GetComponent<PlayerController>();
         if (player != null)
         {
-            player.SetSpawn(transform.position);
+            Vector3 pos = new Vector3(transform.position.x + 1, transform.position.y + 1, transform.position.z);
+            player.SetSpawn(pos);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,13 +13,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform look;
     [SerializeField] private bool grounded = false;
     [SerializeField] private int collected = 0;
+    [SerializeField] public int totalCollectables = 5;
     [SerializeField] private Vector3 startPos;
     [SerializeField] private Vector3 spawnPos;
     [SerializeField] private float spawnSpeed;
     [SerializeField] private float spawnJumpForce;
     [SerializeField] private bool canDoubleJump = false;
     [SerializeField] private bool hasDoubleJumped = false;
-
+    [SerializeField] private TMP_Text title;
+    [SerializeField] private TMP_Text restartReminder;
+    [SerializeField] private TMP_Text collectables;
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -31,7 +36,7 @@ public class PlayerController : MonoBehaviour
         if (gameStart)
         {
             Move();
-            if(Input.GetKeyDown(KeyCode.Space) && (grounded || canDoubleJump) ) { Jump(); }
+            if(Input.GetKeyDown(KeyCode.Space)) { Jump(); }
             if(Input.GetKeyDown(KeyCode.R)) { Respawn(); }
 
 
@@ -57,16 +62,22 @@ public class PlayerController : MonoBehaviour
         spawnSpeed = speed;
         SetSpawn(startPos);
         gameStart = true;
+        UpdateUI();
     }
     private void Jump()
     {
-        if (!grounded)
-        {
-            
-        }
-        grounded = false;
         Vector3 dir = -Physics.gravity.normalized * jumpForce;
-        _rb.AddForce(dir, ForceMode.Impulse);
+        if (grounded)
+        {
+            _rb.AddForce(dir, ForceMode.Impulse);
+            grounded = false;
+        }
+        else if (canDoubleJump && !hasDoubleJumped) 
+        {
+            _rb.AddForce(dir, ForceMode.Impulse);
+            hasDoubleJumped = true;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -76,6 +87,10 @@ public class PlayerController : MonoBehaviour
         {
             //Debug.Log("Reset");
             grounded = true;
+            if (canDoubleJump) 
+            {
+                hasDoubleJumped = false;
+            }
         }
     }
     public void AddCollectable()
@@ -83,19 +98,33 @@ public class PlayerController : MonoBehaviour
         collected++;
         UpdateUI();
     }
-    private void UpdateUI()
+    public void UpdateUI()
     {
-        //update collectables
+        collectables.SetText("Collected: " + collected + "/" + totalCollectables);
+        if (gameStart)
+        {
+            collectables.gameObject.SetActive(true);
+            title.gameObject.SetActive(false);
+            restartReminder.gameObject.SetActive(false);
+        }
+        else
+        {
+            collectables.gameObject.SetActive(false);
+            title.gameObject.SetActive(true);
+            restartReminder.gameObject.SetActive(false);
+        }
     }
     public void SetSpawn(Vector3 pos)
     {
         spawnPos = pos;
+        restartReminder.gameObject.SetActive(true);
+        StartCoroutine("TurnOff");
         //put a coroutine that says you can respawn with r
     }
     private void Respawn()
     {
         transform.position = spawnPos;
-
+        
     }
     public void ApplyPowerup(PowerUpType type)
     {
@@ -116,6 +145,11 @@ public class PlayerController : MonoBehaviour
         speed = spawnSpeed;
         jumpForce = spawnJumpForce;
         canDoubleJump = false;
+    }
+    private IEnumerator TurnOff()
+    {
+        yield return new WaitForSeconds(3);
+            restartReminder.gameObject.SetActive(false);
     }
     
 }

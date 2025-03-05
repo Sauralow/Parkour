@@ -13,12 +13,13 @@ public class Collectable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-        if (player != null) 
+        PlayerController player = other.gameObject.GetComponent<PlayerController>();
+        if (player != null)
         {
             player.AddCollectable();
             Destroy(this.gameObject);

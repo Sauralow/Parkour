@@ -21,13 +21,19 @@ public class PowerUp : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
+  
+    private void OnTriggerEnter(Collider other)
     {
-        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        PlayerController player = other.gameObject.GetComponent<PlayerController>();
         if (player != null)
         {
             player.ApplyPowerup(type);
         }
         MovingWall wall = GameObject.Find("Moving Wall").GetComponent<MovingWall>();
+        if (wall != null)
+        {
+            wall.move = true;
+        }
+        Destroy(this.gameObject);
     }
 }

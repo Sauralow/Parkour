@@ -147,11 +147,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f059ece8d9670ce41aeefcb7d782f9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
+  speed: 40
   jumpForce: 100
   gameStart: 0
   look: {fileID: 0}
   grounded: 0
+  collected: 0
+  startPos: {x: 0, y: 0, z: 0}
+  spawnPos: {x: 0, y: 0, z: 0}
+  spawnSpeed: 0
+  spawnJumpForce: 0
+  canDoubleJump: 0
+  hasDoubleJumped: 0
 --- !u!114 &316522292163368940
 MonoBehaviour:
   m_ObjectHideFlags: 0
