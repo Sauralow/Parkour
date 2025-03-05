@@ -5,11 +5,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private PlayerController player;
+    [SerializeField] private CameraController playerCamera;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        player.UpdateUI();
     }
 
     // Update is called once per frame
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
         if (player != null && Input.GetKeyDown(KeyCode.P)) 
         {
             player.StartGame();
+            playerCamera.gameOn = true;
         }
     }
 }
